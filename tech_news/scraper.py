@@ -47,8 +47,23 @@ def scrape_next_page_link(html_content):
 
 # Requisito 4
 def scrape_news(html_content):
-    """Seu código deve vir aqui"""
-    raise NotImplementedError
+    bs = BeautifulSoup(html_content, "html.parser")
+    news = []
+
+    for article in bs.find_all("article", {"class": "single-post"}):
+        title = article.find("h1", {"class": "single-post-title"}).text
+        summary = article.find("p", {"class": "single-post-content"}).text
+        link = article.find("a", {"class": "single-post-link"})["href"]
+        source = article.find("a", {"class": "single-post-source"}).text
+
+        news.append(
+            {
+                "title": title,
+                "summary": summary,
+                "link": link,
+                "source": source,
+            }
+        )
 
 
 # Requisito 5
