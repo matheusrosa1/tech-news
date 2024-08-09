@@ -1,4 +1,5 @@
 import time
+from bs4 import BeautifulSoup
 import requests
 
 
@@ -20,8 +21,18 @@ def fetch(url):
 
 # Requisito 2
 def scrape_updates(html_content):
-    """Seu código deve vir aqui"""
-    raise NotImplementedError
+    bs = BeautifulSoup(html_content, "html.parser")
+
+    articles = bs.find_all("article", {"class": "entry-preview"})
+
+    news_links = []
+
+    for article in articles:
+        link_tag = article.find("a", {"class": "cs-overlay-link"})
+        if link_tag:
+            news_links.append(link_tag["href"])
+
+    return news_links
 
 
 # Requisito 3
