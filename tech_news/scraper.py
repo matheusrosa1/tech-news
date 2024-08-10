@@ -57,7 +57,35 @@ def scrape_news(html_content):
 
     writer = bs.find("span", {"class": "author"}).get_text().strip()
 
-    reading_time = bs.find("li", {"class": "reading-time"}).get_text().strip()
+    reading_time_str = bs.find("li", {"class": "meta-reading-time"}).get_text()
+
+    if reading_time_str:
+        reading_time = int("".join(filter(str.isdigit, reading_time_str)))
+    else:
+        reading_time = None  # Ou um valor padrão, como 0, dependendo do caso
+
+    summary_tag = bs.find("div", {"class": "entry-content"})
+    if summary_tag:
+        summary_paragraph = summary_tag.find("p")
+        summary = (
+            summary_paragraph.get_text().strip() if summary_paragraph else ""
+        )
+    else:
+        summary = ""
+
+    category = bs.find("span", {"class": "label"}).get_text().strip()
+
+    new_data = {
+        "url": url,
+        "title": title,
+        "timestamp": timestamp,
+        "writer": writer,
+        "reading_time": reading_time,
+        "summary": summary,
+        "category": category,
+    }
+
+    return new_data
 
 
 # Requisito 5
