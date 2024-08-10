@@ -2,6 +2,8 @@ import time
 from bs4 import BeautifulSoup
 import requests
 
+from tech_news.database import create_news
+
 
 headers = {"user-agent": "Fake user-agent"}
 
@@ -62,7 +64,7 @@ def scrape_news(html_content):
     if reading_time_str:
         reading_time = int("".join(filter(str.isdigit, reading_time_str)))
     else:
-        reading_time = None  # Ou um valor padrão, como 0, dependendo do caso
+        reading_time = None
 
     summary_tag = bs.find("div", {"class": "entry-content"})
     if summary_tag:
@@ -90,5 +92,23 @@ def scrape_news(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
-    raise NotImplementedError
+    news_list = []
+    url = "https://blog.betrybe.com/"
+    while len(news_list) < amount:
+        html_content = fetch(url)
+        news_urls = scrape_updates(html_content)
+
+        for news_url in news_urls:
+            if len(news_list) < amount:
+                news_html = fetch(news_url)
+                news_data = scrape_news(news_html)
+                news_list.append(news_data)
+            else:
+                break
+
+        url = scrape_next_page_link(html_content)
+        if not url:
+            break
+
+    create_news(news_list)
+    return news_list
