@@ -48,22 +48,16 @@ def scrape_next_page_link(html_content):
 # Requisito 4
 def scrape_news(html_content):
     bs = BeautifulSoup(html_content, "html.parser")
-    news = []
 
-    for article in bs.find_all("article", {"class": "single-post"}):
-        title = article.find("h1", {"class": "single-post-title"}).text
-        summary = article.find("p", {"class": "single-post-content"}).text
-        link = article.find("a", {"class": "single-post-link"})["href"]
-        source = article.find("a", {"class": "single-post-source"}).text
+    url = bs.find("link", {"rel": "canonical"})["href"]
 
-        news.append(
-            {
-                "title": title,
-                "summary": summary,
-                "link": link,
-                "source": source,
-            }
-        )
+    title = bs.find("h1", {"class": "entry-title"}).get_text().strip()
+
+    timestamp = bs.find("li", {"class": "meta-date"}).get_text().strip()
+
+    writer = bs.find("span", {"class": "author"}).get_text().strip()
+
+    reading_time = bs.find("li", {"class": "reading-time"}).get_text().strip()
 
 
 # Requisito 5
