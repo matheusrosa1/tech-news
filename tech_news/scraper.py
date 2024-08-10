@@ -8,7 +8,6 @@ from tech_news.database import create_news
 headers = {"user-agent": "Fake user-agent"}
 
 
-# Requisito 1
 def fetch(url):
     try:
         time.sleep(1)
@@ -21,7 +20,6 @@ def fetch(url):
         return None
 
 
-# Requisito 2
 def scrape_updates(html_content):
     bs = BeautifulSoup(html_content, "html.parser")
 
@@ -37,7 +35,6 @@ def scrape_updates(html_content):
     return news_links
 
 
-# Requisito 3
 def scrape_next_page_link(html_content):
     bs = BeautifulSoup(html_content, "html.parser")
     next_page = bs.find("a", {"class": "next"})
@@ -47,7 +44,6 @@ def scrape_next_page_link(html_content):
     return None
 
 
-# Requisito 4
 def scrape_news(html_content):
     bs = BeautifulSoup(html_content, "html.parser")
 
@@ -90,7 +86,6 @@ def scrape_news(html_content):
     return new_data
 
 
-# Requisito 5
 def get_tech_news(amount):
     news_list = []
     url = "https://blog.betrybe.com/"
