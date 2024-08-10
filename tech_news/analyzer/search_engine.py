@@ -1,7 +1,14 @@
 # Requisito 7
+from tech_news.database import search_news
+
+
 def search_by_title(title):
-    """Seu código deve vir aqui"""
-    raise NotImplementedError
+    return [
+        (notice["title"], notice["url"])
+        for notice in search_news(
+            {"title": {"$regex": title, "$options": "i"}}
+        )
+    ]
 
 
 # Requisito 8
